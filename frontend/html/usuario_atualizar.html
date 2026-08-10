@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style_cad.css">
+    <script src="../js/usuario_atualizar.js" defer></script>
+    <title>Atualizar Usuário</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Home</a>&emsp;&emsp;
+            <span class="titulo_menu">Usuários</span>&emsp;
+            <a href="./usuario_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="./usuario_listar.html">Listar</a>&emsp;
+            <a href="./usuario_consultar.html">Consultar</a>&emsp;
+            <a href="./usuario_atualizar.html">Atualizar</a>&emsp;
+            <a href="./usuario_apagar.html">Apagar</a>
+            <br><br><hr><br>
+        </nav>
+    </header>
+    <main>
+        <h2>Atualizar Usuário</h2>
+        <br>
+        <label for="codigo_busca">Código do Usuário</label><br>
+        <input type="number" id="codigo_busca" required>
+        <button id="btn_buscar">Buscar</button>
+        <br><br>
+
+        <form id="form_atualizar" style="display: none;">
+            <input type="hidden" id="codUsuario">
+
+            <label for="nome">Nome</label><br>
+            <input type="text" id="nome" required><br><br>
+
+            <label for="sobrenome">Sobrenome</label><br>
+            <input type="text" id="sobrenome" required><br><br>
+
+            <label for="idade">Idade</label><br>
+            <input type="number" id="idade" required><br><br>
+
+            <label for="email">E-mail</label><br>
+            <input type="email" id="email" required><br><br>
+
+            <label for="telefone">Telefone</label><br>
+            <input type="text" id="telefone"><br><br>
+
+            <label for="endereco">Endereço</label><br>
+            <input type="text" id="endereco"><br><br>
+
+            <label for="cidade">Cidade</label><br>
+            <input type="text" id="cidade"><br><br>
+
+            <label for="estado">Estado</label><br>
+            <input type="text" id="estado"><br><br>
+
+            <button id="btn_salvar">Salvar Alterações</button>
+        </form>
+
+        <br>
+        <div id="resposta" class="resposta"></div>
+    </main>
+</body>
+</html>

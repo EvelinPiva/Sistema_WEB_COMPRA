@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style_cad.css">
+    <script src="../js/movimento_cadastrar.js" defer></script>
+    <title>Registrar Compra</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Home</a>&emsp;&emsp;
+            <span class="titulo_menu">Operações</span>&emsp;
+            <a href="./movimento_cadastrar.html">Registrar Compra</a>&emsp;
+            <a href="./movimento_listar.html">Histórico de Compras</a>
+            <br><br><hr><br>
+        </nav>
+    </header>
+    <main>
+        <h2>Registrar Movimentação de Estoque (Entrada/Saída)</h2>
+        <br>
+        <form id="form_movimento">
+            <label for="idUsuario">Código do Usuário</label><br>
+            <input type="number" id="idUsuario" required><br><br>
+
+            <label for="idProduto">Código do Produto</label><br>
+            <input type="number" id="idProduto" required><br><br>
+
+            <label for="tipoMovimento">Tipo de Movimento</label><br>
+            <select id="tipoMovimento" required>
+                <option value="">Selecione...</option>
+                <option value="ENTRADA">ENTRADA</option>
+                <option value="SAIDA">SAIDA</option>
+            </select><br><br>
+
+            <label for="quantidadeMovimentada">Quantidade</label><br>
+            <input type="number" id="quantidadeMovimentada" required><br><br>
+
+            <label for="descontoAplicado">Desconto Aplicado (%)</label><br>
+            <input type="number" step="0.01" id="descontoAplicado" value="0"><br><br>
+
+            <label for="formaPagamento">Forma de Pagamento</label><br>
+            <select id="formaPagamento" required>
+                <option value="">Selecione...</option>
+                <option value="DEBITO">DÉBITO</option>
+                <option value="CREDITO">CRÉDITO</option>
+                <option value="DINHEIRO">DINHEIRO</option>
+            </select><br><br>
+
+            <label for="statusCompra">Status da Compra</label><br>
+            <select id="statusCompra" required>
+                <option value="">Selecione...</option>
+                <option value="PAGA">PAGA</option>
+                <option value="PENDENTE">PENDENTE</option>
+            </select><br><br>
+
+            <label for="dataCompra">Data da Compra</label><br>
+            <input type="date" id="dataCompra" required><br><br>
+
+            <button id="btn_registrar">Registrar Movimentação</button>
+        </form>
+
+        <br>
+        <div id="resposta" class="resposta"></div>
+    </main>
+</body>
+</html>
