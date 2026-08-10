@@ -1,3 +1,21 @@
+/* ===========================================================
+   PIVA MERCADOS - ESTILO GERAL DO SISTEMA
+   Fonte formal (Roboto) + fundo branco + detalhes roxo e verde
+   =========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root{
+    --roxo: #5E2A84;
+    --roxo-escuro: #46205F;
+    --verde: #2E8B4F;
+    --verde-escuro: #226B3C;
+    --preto: #1A1A1A;
+    --cinza: #666666;
+    --cinza-claro: #E0E0E0;
+    --fundo-claro: #F7F5FA;
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -5,61 +23,97 @@
 }
 
 body{
-    background-color: SkyBlue;
-    font-family: 'Segoe UI', sans-serif;
+    background-color: #FFFFFF;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: var(--preto);
+}
+
+header{
+    background-color: #FFFFFF;
+    border-bottom: 3px solid var(--roxo);
 }
 
 nav{
-    padding: 20px 10px;
+    padding: 18px 10px;
     text-align: center;
     line-height: 2.2;
 }
 
 nav a{
     text-decoration: none;
-    font-size: 1.3rem;
-    font-family: 'Segoe UI', sans-serif;
-    color: white;
+    font-size: 1.1rem;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: 500;
+    color: var(--preto);
     padding: 6px 12px;
+    border-radius: 4px;
     display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-a:hover{
-    background-color: rgb(108, 194, 68);
-    border-radius: 16px;
-    transition: background-color 0.4s ease, border-radius 0.4s ease;
+nav a.brand{
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--roxo);
+    padding: 4px 10px;
+}
+
+nav a.brand:hover{
+    background-color: transparent;
+    color: var(--roxo-escuro);
+}
+
+nav a:hover{
+    background-color: var(--verde);
+    color: #FFFFFF;
 }
 
 main, footer{
     text-align: center;
-    color: white;
+    color: var(--preto);
     padding: 40px 20px;
 }
 
 h1{
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: 700;
     font-size: 3rem;
+    color: var(--roxo);
     margin-bottom: 10px;
 }
 
 h2{
-    font-size: 2rem;
-    font-weight: 500;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: var(--cinza);
+}
+
+.eyebrow{
+    display: inline-block;
+    font-family: 'Roboto', Arial, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--verde);
+    margin-bottom: 12px;
 }
 
 .titulo_menu{
-    color: rgb(2, 132, 253); 
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 1.4rem; 
-    font-weight: bold;
+    color: var(--verde);
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
     display: inline-block;
 }
 
 hr {
     border: 0;
-    height: 1px;
-    background-color: rgba(255, 255, 255, 0.3);
+    height: 2px;
+    background-color: var(--cinza-claro);
     width: 80%;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
 /* CONTAINER GERENCIAL DOS GRÁFICOS */
@@ -68,36 +122,39 @@ hr {
     max-width: 1100px;
     height: 600px;
     margin: 30px auto;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: #FFFFFF;
     padding: 25px;
-    border-radius: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid var(--cinza-claro);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 /* BOTÃO DE EMISSÃO DE RELATÓRIO PADRONIZADO */
 .btn_gerar {
-    background-color: black;
-    color: white;
-    font-size: 1.25rem;
-    font-weight: bold;
+    background-color: var(--roxo);
+    color: #FFFFFF;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
     padding: 12px 24px;
-    border: 2px solid white;
-    border-radius: 16px;
+    border: 2px solid var(--roxo);
+    border-radius: 6px;
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .btn_gerar:hover {
-    background-color: #1e1e1e;
-    transform: scale(1.03);
+    background-color: var(--verde);
+    border-color: var(--verde);
 }
 
 /* TEXTO DE RETORNO DO FRONT-END */
 .resposta {
-    font-size: 1.5rem; /* Fonte ampliada */
-    font-weight: bold; /* Negrito */
-    color: white; /* Sempre texto branco puro */
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--preto);
     margin: 15px auto;
+    font-family: 'Roboto', Arial, sans-serif;
 }
 
 /* DASHBOARD DE PRODUTOS - GRID DE CARDS */
@@ -110,54 +167,65 @@ hr {
 }
 
 .card_produto {
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
+    background-color: #FFFFFF;
+    border: 1px solid var(--cinza-claro);
+    border-radius: 10px;
     padding: 20px;
     width: 260px;
-    color: white;
+    color: var(--preto);
     text-align: center;
-    transition: transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .card_produto:hover {
     transform: scale(1.03);
+    border-color: var(--roxo);
 }
 
 .card_produto img {
     width: 100%;
     height: 160px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 8px;
     margin-bottom: 12px;
 }
 
 .card_produto .sem_imagem {
     width: 100%;
     height: 160px;
-    border-radius: 12px;
+    border-radius: 8px;
     margin-bottom: 12px;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: var(--fundo-claro);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--cinza);
 }
 
 .card_produto h3 {
-    color: rgb(2, 132, 253);
+    color: var(--roxo);
     font-size: 1.3rem;
     margin-bottom: 8px;
 }
 
 .card_produto p {
     font-size: 1rem;
+    color: var(--cinza);
     margin: 4px 0;
 }
 
 /* Destaque visual para produtos com estoque crítico (< 10) */
 .card_critico {
-    border-color: #d9534f;
-    box-shadow: 0 0 12px rgba(217, 83, 79, 0.5);
+    border-color: #C0392B;
+    box-shadow: 0 0 10px rgba(192, 57, 43, 0.35);
+}
+
+/* RESPONSIVO */
+@media (max-width: 640px){
+    nav a{ font-size: 0.95rem; padding: 6px 9px; }
+    nav a.brand{ font-size: 1.3rem; display: block; margin-bottom: 6px; }
+    .card_produto{ width: 100%; max-width: 320px; }
+    h1{ font-size: 2rem; }
 }
