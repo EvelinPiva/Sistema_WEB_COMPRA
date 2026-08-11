@@ -229,3 +229,11 @@ hr {
     .card_produto{ width: 100%; max-width: 320px; }
     h1{ font-size: 2rem; }
 }
+.logo {
+    width: 170px;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px;
+    position: relative;
+    left: -5px;
+}
