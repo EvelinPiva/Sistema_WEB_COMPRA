@@ -1,131 +1,341 @@
-# Piva Mercados — Sistema de Controle de Compras e Estoque
+# 🛒 Piva Mercados
 
-Sistema web full-stack desenvolvido como projeto acadêmico (SENAI), para gerenciar o
-cadastro de usuários, produtos e as movimentações de compra (entrada e saída) de
-estoque de um supermercado fictício.
+### Sistema de Controle de Compras e Estoque
 
-## Para que serve
+Um sistema web **full-stack** desenvolvido como projeto acadêmico no **SENAI**, pensado para representar a rotina de um supermercado e facilitar o controle de **usuários, produtos, movimentações e estoque**.
 
-O sistema resolve três frentes de um pequeno negócio de varejo:
+> 💜 **Piva Mercados** — tecnologia aplicada à organização e ao controle de um pequeno negócio.
 
-- **Cadastro de pessoas e mercadorias** — manter uma base de usuários (clientes/operadores)
-  e de produtos, com todos os dados necessários para operar o estoque.
-- **Controle de estoque** — cada compra registrada (entrada ou saída) atualiza
-  automaticamente a quantidade em estoque do produto envolvido, sem precisar de
-  atualização manual.
-- **Relatórios gerenciais** — dois gráficos analíticos, gerados a partir de *views* SQL
-  nativas do banco, mostram o volume financeiro movimentado por produto e os itens com
-  estoque crítico, apoiando decisões de reposição.
+---
 
-## Como foi pensado (arquitetura)
+## ✨ Sobre o projeto
 
-O projeto segue a separação clássica **frontend / backend**, comunicando-se por uma API
-REST — sem frameworks de frontend, propositalmente, para manter o código simples de
-explicar e sustentar (HTML, CSS e JavaScript puro consumindo `fetch`).
+O Piva Mercados foi desenvolvido para centralizar as principais operações de um supermercado em um único sistema.
 
+A aplicação permite cadastrar usuários e produtos, registrar entradas e saídas de mercadorias e acompanhar informações importantes do estoque por meio de **relatórios e gráficos**.
+
+O principal objetivo é automatizar tarefas que normalmente seriam realizadas manualmente, tornando o controle mais rápido, organizado e confiável.
+
+### O sistema trabalha com três áreas principais:
+
+👥 **Pessoas e mercadorias**
+Cadastro e gerenciamento de usuários e produtos.
+
+📦 **Controle de estoque**
+As movimentações registradas atualizam automaticamente a quantidade disponível de cada produto.
+
+📊 **Relatórios gerenciais**
+Gráficos apresentam informações sobre o volume financeiro movimentado e os produtos que estão com estoque reduzido.
+
+---
+
+# 🧩 Estrutura do sistema
+
+A aplicação foi construída seguindo uma arquitetura separada entre **frontend e backend**, conectados por uma **API REST**.
+
+```text
+PIVA MERCADOS
+│
+├── 🎨 frontend
+│   ├── html/       → páginas do sistema
+│   ├── js/         → lógica e comunicação com a API
+│   ├── css/        → estilos e identidade visual
+│   └── index.html  → página inicial
+│
+└── ⚙️ backend
+    ├── models/       → modelos e estrutura das tabelas
+    ├── controller/   → regras de negócio
+    ├── db/           → conexão com o banco
+    ├── criarViews.js → criação dos relatórios SQL
+    ├── sync.js       → sincronização das tabelas
+    └── index.js      → rotas e inicialização da API
 ```
-Sistema_WEB_COMPRA/
-├── frontend/            → interface (HTML + CSS + JS puro)
-│   ├── html/             → uma página por operação de cada entidade
-│   ├── js/                → um arquivo JS por página, cada um falando com um endpoint
-│   ├── css/                → estilo visual (style.css + style_cad.css)
-│   └── index.html            → página inicial / menu
-└── backend/             → API REST (Node.js + Express + Sequelize)
-    ├── models/               → definição das tabelas (Usuario, Produto, Compra + Views)
-    ├── controller/            → regras de negócio de cada entidade
-    ├── db/conn.js               → conexão com o MySQL via Sequelize
-    ├── criarViews.js             → cria as views SQL usadas nos relatórios
-    ├── sync.js                    → sincroniza (recria) as tabelas no banco
-    └── index.js                    → define as rotas e sobe o servidor Express
+
+A escolha por utilizar **HTML, CSS e JavaScript puro** no frontend foi proposital, permitindo manter o projeto simples de compreender, apresentar e sustentar durante a avaliação.
+
+---
+
+# 🗃️ Modelo de dados
+
+O sistema possui três entidades principais:
+
+### 👤 Usuário
+
+Armazena os dados da pessoa responsável pela compra ou operação no sistema.
+
+**Principais informações:**
+
+* Nome
+* Contato
+* Endereço
+
+### 🛍️ Produto
+
+Representa as mercadorias disponíveis no supermercado.
+
+**Principais informações:**
+
+* Nome
+* Preço
+* Categoria
+* Quantidade em estoque
+
+### 🧾 Compra
+
+Responsável por registrar as movimentações de estoque.
+
+Cada registro relaciona um **usuário** a um **produto** e informa:
+
+* Tipo da movimentação
+* Quantidade
+* Forma de pagamento
+* Preço final
+* Desconto aplicado
+
+Quando uma movimentação é registrada, o backend atualiza automaticamente o estoque do produto envolvido.
+
+---
+
+# 📊 Relatórios e indicadores
+
+O sistema possui dois relatórios construídos utilizando **Views SQL**, permitindo transformar os dados do banco em informações úteis para análise.
+
+### 💰 Top 5 por volume financeiro
+
+A view `vw_volume_compras` calcula o volume financeiro movimentado por produto.
+
+Esses dados alimentam o gráfico de **Top 5 produtos por volume financeiro**.
+
+### ⚠️ Estoque crítico
+
+A view `vw_produtos_criticos` identifica produtos que possuem **menos de 10 unidades disponíveis**.
+
+O resultado é apresentado em um gráfico de alerta, facilitando a identificação dos produtos que podem precisar de reposição.
+
+As duas views são criadas diretamente no banco utilizando SQL:
+
+```sql
+CREATE OR REPLACE VIEW
 ```
 
-**Modelo de dados (3 entidades principais):**
+Depois, são utilizadas no projeto como models somente leitura através do Sequelize.
 
-- `Usuario` — dados de quem realiza a compra (nome, contato, endereço).
-- `Produto` — mercadoria vendida, com preço, categoria e quantidade em estoque.
-- `Compra` — tabela de movimentação: liga um `Usuario` a um `Produto`, guarda se foi
-  `ENTRADA` ou `SAIDA`, quantidade, forma de pagamento e o preço final calculado (com
-  desconto aplicado). Ao ser criada, ela **atualiza o `qtdeEstoque` do produto**
-  automaticamente no backend.
+---
 
-**Relatórios (views SQL nativas):**
+# 📝 Formas de cadastro
 
-- `vw_volume_compras` — soma quanto cada produto movimentou financeiramente, usada
-  para o gráfico "Top 5 por volume financeiro".
-- `vw_produtos_criticos` — lista produtos com estoque abaixo de 10 unidades, usada
-  para o gráfico de alerta de estoque crítico.
+Para facilitar tanto a utilização quanto os testes durante o desenvolvimento, o sistema possui duas formas de inserir dados.
 
-Ambas são criadas via SQL puro (`CREATE OR REPLACE VIEW`) em `criarViews.js` e mapeadas
-como *models* somente-leitura no Sequelize, para reaproveitar o mesmo padrão de
-controller/rota do resto do sistema.
+### 01 · Cadastro manual
 
-**Duas formas de cadastro** foram implementadas em cada entidade, para cobrir tanto o
-uso manual quanto a carga inicial de dados de teste:
+O usuário preenche o formulário diretamente no sistema.
 
-1. **Cadastro manual** — formulário tradicional, envia um `POST` com os campos digitados.
-2. **Carga em lote** — busca dados prontos na API pública [DummyJSON](https://dummyjson.com/)
-   (usuários e produtos fictícios) e envia em lote (`bulkCreate`) para popular o banco
-   rapidamente durante o desenvolvimento e os testes.
+Os dados são enviados através de uma requisição `POST` para a API.
 
-**CRUD completo:** cada entidade (Usuário, Produto e a listagem de Movimentações) tem
-uma tela e uma rota dedicada para Cadastrar, Listar, Consultar, Atualizar e Apagar,
-seguindo sempre o mesmo padrão de nomes entre página HTML → arquivo JS → rota → controller,
-o que facilita achar qualquer funcionalidade no código.
+### 02 · Carga em lote
 
-## Tecnologias utilizadas
+O sistema também consegue buscar dados fictícios na API pública **DummyJSON** e inseri-los no banco de dados em lote utilizando `bulkCreate`.
 
-| Camada     | Tecnologia                                      |
-|------------|--------------------------------------------------|
-| Frontend   | HTML5, CSS3, JavaScript (ES6, `fetch`)            |
-| Gráficos   | Chart.js + chartjs-plugin-datalabels (via CDN)     |
-| Backend    | Node.js, Express 5                                 |
-| ORM        | Sequelize 6                                         |
-| Banco      | MySQL (via `mysql2`)                                 |
-| Outros     | CORS habilitado para o frontend consumir a API livremente |
+Isso facilita bastante a criação de uma base inicial para testes e demonstrações.
 
-## Como rodar o projeto
+---
+
+# 🔄 Operações disponíveis
+
+O projeto possui operações completas para gerenciamento das principais entidades.
+
+### Usuários
+
+* Cadastrar
+* Listar
+* Consultar
+* Atualizar
+* Apagar
+* Carregar dados em lote
+
+### Produtos
+
+* Cadastrar
+* Listar
+* Consultar
+* Atualizar
+* Apagar
+* Carregar dados em lote
+
+### Movimentações
+
+* Registrar entrada
+* Registrar saída
+* Consultar histórico
+
+Essa organização segue um padrão consistente:
+
+```text
+Página HTML
+     ↓
+Arquivo JavaScript
+     ↓
+Rota da API
+     ↓
+Controller
+     ↓
+Model
+     ↓
+Banco de dados
+```
+
+Isso facilita a manutenção e a localização de cada funcionalidade dentro do projeto.
+
+---
+
+# 🛠️ Tecnologias
+
+| Área               | Tecnologia                   |
+| ------------------ | ---------------------------- |
+| 🎨 Interface       | HTML5, CSS3 e JavaScript ES6 |
+| 📡 Comunicação     | Fetch API                    |
+| 📊 Gráficos        | Chart.js + DataLabels        |
+| ⚙️ Backend         | Node.js + Express 5          |
+| 🗂️ ORM            | Sequelize 6                  |
+| 🗄️ Banco de dados | MySQL                        |
+| 🔌 Driver          | mysql2                       |
+| 🌐 Integração      | API REST                     |
+| 🔐 Comunicação     | CORS                         |
+
+---
+
+# 🚀 Como executar
+
+### 1. Clone o projeto
 
 ```bash
-# 1. Instalar as dependências do backend
-cd backend
-npm install
-
-# 2. Configurar o acesso ao MySQL em backend/db/conn.js
-#    (usuário, senha e nome do banco da sua máquina)
-
-# 3. Criar/recriar as tabelas a partir dos models atuais
-node sync.js
-
-# 4. Criar as views usadas nos relatórios
-node criarViews.js
-
-# 5. Subir o servidor da API
-node index.js
-# -> Servidor disponível em http://localhost:3000
-
-# 6. Abrir frontend/index.html no navegador (ou usar uma extensão tipo Live Server)
+git clone <URL-DO-REPOSITORIO>
 ```
 
-## Principais rotas da API
+### 2. Entre na pasta do backend
 
-| Método | Rota                              | Função                                   |
-|--------|------------------------------------|-------------------------------------------|
-| POST   | `/usuarios`                         | Cadastro manual de usuário                 |
-| POST   | `/usuarios/carga-lote`               | Carga em lote via DummyJSON                |
-| GET    | `/usuarios` / `/usuarios/:id`         | Listar / consultar usuário                 |
-| PUT    | `/usuarios/:id`                        | Atualizar usuário                          |
-| DELETE | `/usuarios/:id`                         | Apagar usuário                             |
-| POST   | `/produtos` / `/produtos/carga-lote`     | Cadastro manual / em lote de produto        |
-| GET    | `/produtos` / `/produtos/:id`             | Listar / consultar produto (dashboard usa a listagem) |
-| PUT    | `/produtos/:id`                            | Atualizar produto                          |
-| DELETE | `/produtos/:id`                             | Apagar produto                             |
-| POST   | `/compra`                                    | Registrar movimentação (entrada/saída)      |
-| GET    | `/compra`                                     | Histórico completo de movimentações         |
-| GET    | `/relatorio/volume-compras`                    | Dados para o gráfico de volume financeiro    |
-| GET    | `/relatorio/produtos-criticos`                  | Dados para o gráfico de estoque crítico       |
+```bash
+cd backend
+```
 
-## Observação sobre integridade referencial
+### 3. Instale as dependências
 
-`rel.js` define os relacionamentos entre as tabelas com `onDelete: 'CASCADE'`: apagar um
-usuário ou um produto também apaga o histórico de compras vinculado a ele. Isso é
-intencional, para não deixar registros de `Compra` órfãos no banco.
+```bash
+npm install
+```
+
+### 4. Configure o banco de dados
+
+Abra:
+
+```text
+backend/db/conn.js
+```
+
+e configure:
+
+* usuário do MySQL
+* senha
+* nome do banco
+
+### 5. Crie as tabelas
+
+```bash
+node sync.js
+```
+
+### 6. Crie as Views
+
+```bash
+node criarViews.js
+```
+
+### 7. Inicie a API
+
+```bash
+node index.js
+```
+
+A API ficará disponível em:
+
+```text
+http://localhost:3000
+```
+
+### 8. Abra o frontend
+
+Abra:
+
+```text
+frontend/index.html
+```
+
+ou utilize uma extensão como **Live Server** no VS Code.
+
+---
+
+# 🔗 Principais endpoints
+
+| Método   | Endpoint                       | Descrição                     |
+| -------- | ------------------------------ | ----------------------------- |
+| `POST`   | `/usuarios`                    | Cadastrar usuário             |
+| `POST`   | `/usuarios/carga-lote`         | Carga de usuários             |
+| `GET`    | `/usuarios`                    | Listar usuários               |
+| `GET`    | `/usuarios/:id`                | Consultar usuário             |
+| `PUT`    | `/usuarios/:id`                | Atualizar usuário             |
+| `DELETE` | `/usuarios/:id`                | Remover usuário               |
+| `POST`   | `/produtos`                    | Cadastrar produto             |
+| `POST`   | `/produtos/carga-lote`         | Carga de produtos             |
+| `GET`    | `/produtos`                    | Listar produtos               |
+| `GET`    | `/produtos/:id`                | Consultar produto             |
+| `PUT`    | `/produtos/:id`                | Atualizar produto             |
+| `DELETE` | `/produtos/:id`                | Remover produto               |
+| `POST`   | `/compra`                      | Registrar movimentação        |
+| `GET`    | `/compra`                      | Histórico de movimentações    |
+| `GET`    | `/relatorio/volume-compras`    | Dados do relatório financeiro |
+| `GET`    | `/relatorio/produtos-criticos` | Dados do estoque crítico      |
+
+---
+
+# 🔗 Relacionamentos
+
+O arquivo `rel.js` define os relacionamentos entre as entidades utilizando Sequelize.
+
+As relações utilizam:
+
+```javascript
+onDelete: 'CASCADE'
+```
+
+Dessa forma, quando um usuário ou produto é removido, as movimentações relacionadas também são excluídas.
+
+Essa regra foi definida para evitar registros de compras que apontem para entidades que já não existem no banco.
+
+---
+
+# 🎯 Objetivo acadêmico
+
+Além de representar um cenário real de varejo, o projeto foi desenvolvido para colocar em prática conceitos estudados durante o curso técnico, como:
+
+* Desenvolvimento web
+* APIs REST
+* JavaScript
+* Node.js
+* Banco de dados relacional
+* SQL
+* Sequelize
+* CRUD
+* Relacionamentos entre tabelas
+* Views SQL
+* Consumo de APIs externas
+* Arquitetura frontend/backend
+* Manipulação de dados
+* Visualização de informações
+
+---
+
+## 💜 Piva Mercados
+
+**Sistema acadêmico desenvolvido para o curso Técnico em Desenvolvimento de Sistemas — SENAI.**
+
+> Um projeto criado para transformar dados de estoque em informação útil para o negócio.
